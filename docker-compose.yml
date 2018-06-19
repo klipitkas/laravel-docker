@@ -1,0 +1,88 @@
+version: '2.2'
+
+services:
+  
+  app:
+    build:
+      context: ./
+      dockerfile: app.dockerfile
+    hostname: app
+    working_dir: /var/www
+    networks:
+      laranet:
+        ipv4_address: "10.15.0.2"
+        aliases:
+          - app
+    volumes:
+      - ./storage/www:/var/www
+    environment:
+      - "DB_PORT=3306"
+      - "DB_HOST=database"
+
+  web:
+    hostname: web 
+    build:
+      context: ./
+      dockerfile: web.dockerfile
+    working_dir: /var/www
+    networks:
+      laranet:
+        ipv4_address: "10.15.0.3"
+        aliases:
+          - web
+    volumes_from:
+      - app
+    ports:
+      - "80:80"
+
+  queue:
+    hostname: queue
+    image: schickling/beanstalkd:latest
+    networks: 
+      laranet:
+        ipv4_address: "10.15.0.4"
+        aliases:
+          - queue
+    ports:
+      - "11300:11300"
+
+  database:
+    hostname: db
+    image: mysql:5.7
+    networks:
+      laranet:
+        ipv4_address: "10.15.0.7"
+        aliases:
+          - db
+    volumes:
+      - ./storage/db:/var/lib/mysql
+    environment:
+      - "MYSQL_DATABASE=db"
+      - "MYSQL_USER=user"
+      - "MYSQL_PASSWORD=password"
+      - "MYSQL_ROOT_PASSWORD=root"
+    ports:
+        - "3306:3306"
+
+  phpmyadmin:
+    hostname: pma
+    image: phpmyadmin/phpmyadmin
+    networks:
+      laranet:
+        ipv4_address: "10.15.0.8"
+        aliases:
+          - pma
+    environment:
+     - "PMA_ARBITRARY=1"
+     - "PMA_HOST=10.15.0.7"
+    ports:
+     - "8080:80"
+
+volumes:
+  dbdata:
+networks:
+  laranet:
+    ipam:
+      config:
+        - subnet: 10.15.0.0/16
+          gateway: 10.15.0.1
