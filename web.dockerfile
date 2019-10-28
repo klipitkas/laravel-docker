@@ -1,3 +1,3 @@
-FROM nginx:1.10
+FROM nginx:1.16.1-alpine
 
-ADD vhost.conf /etc/nginx/conf.d/default.conf
+ADD default.conf /etc/nginx/conf.d/default.conf
