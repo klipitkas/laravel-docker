@@ -7,10 +7,13 @@ Laravel + Docker = ❤️
 
 The repository contains the following software:
 
-- php **7.3** (fpm)
-- nginx **1.16** (alpine)
+- php **7.3** + nginx **1.16.1** (alpine)
+- supervisord **4.1.0** (alpine)
+- mariadb **10.4** (bionic)
+- adminer **4**
+- redis **5** (alpine)
 
-Volumes are mounted to directory:
+Volumes are mounted on directory:
 
 - **./storage**
 
@@ -44,16 +47,9 @@ or:
 $ docker-compose build
 ```
 
-### Mount your Laravel directory
+### Check the results
 
-Use the following command in order to make a symbolic link of any folder
-inside the container:
-
-```
-$ ln -s /path/to/your/laravel/install ./storage/www
-```
-
-You should now be able to see your Laravel installation available at:
+Add the laravel files in the mounted directory and then visit:
 
 - http://localhost
 
@@ -62,10 +58,10 @@ You should now be able to see your Laravel installation available at:
 If you need access from a container to another instead of using the internal
 IP addresses of the containers, you can instead use their hostnames:
 
-- app (for the php-fpm container)
-- web (for the nginx container)
-- db (for the mysql container)
-- pma (for the phpmyadmin container)
+- app (for the php-fpm/nginx container)
+- database (for the mariadb container)
+- adminer (for the adminer container)
+- queue (for the redis container)
 
 ### Bug reports - features
 
