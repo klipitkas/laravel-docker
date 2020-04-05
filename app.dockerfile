@@ -6,8 +6,7 @@ RUN apk add --no-cache --virtual .build-deps  \
     libjpeg-turbo-dev \
     libpng-dev \
     libxml2-dev \
-    bzip2-dev \
-    libzip-dev
+    bzip2-dev
 
 # Add Production Dependencies
 RUN apk add --update --no-cache \
@@ -33,10 +32,11 @@ RUN docker-php-ext-configure \
     intl \
     gd \
     xml \
-    zip \
     bz2 \
     pcntl \
     bcmath
+
+RUN apk add --no-cache libzip-dev && docker-php-ext-install zip
 
 # Add Composer
 RUN curl -s https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
