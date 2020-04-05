@@ -24,6 +24,7 @@ RUN docker-php-ext-configure \
     opcache --enable-opcache &&\
     docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ &&\
     docker-php-ext-install \
+    opcache \
     mysqli \
     pdo \
     pdo_mysql \
@@ -44,6 +45,7 @@ ENV PATH="./vendor/bin:$PATH"
 
 COPY master.ini /etc/supervisor.d/
 COPY default.conf /etc/nginx/conf.d/
+COPY opcache.ini /usr/local/etc/php/conf.d/
 
 # Remove Build Dependencies
 RUN apk del -f .build-deps
