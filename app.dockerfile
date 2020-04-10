@@ -45,7 +45,7 @@ ENV PATH="./vendor/bin:$PATH"
 
 COPY master.ini /etc/supervisor.d/
 COPY default.conf /etc/nginx/conf.d/
-COPY opcache.ini /usr/local/etc/php/conf.d/
+#COPY opcache.ini /usr/local/etc/php/conf.d/
 
 # Remove Build Dependencies
 RUN apk del -f .build-deps
