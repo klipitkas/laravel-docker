@@ -1,10 +1,10 @@
 networks:
   laranet: {}
 services:
-  adminer:
+  pma:
     environment:
-      ADMINER_DEFAULT_SERVER: database
-    image: adminer:4-standalone
+      PMA_HOST: database
+    image: phpmyadmin/phpmyadmin
     networks:
       laranet: null
     ports:
