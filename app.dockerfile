@@ -6,7 +6,10 @@ RUN apk add --no-cache --virtual .build-deps  \
     libjpeg-turbo-dev \
     libpng-dev \
     libxml2-dev \
-    bzip2-dev
+    bzip2-dev \
+    autoconf \
+    openssl-dev \
+    build-base
 
 # Add Production Dependencies
 RUN apk add --update --no-cache \
@@ -17,6 +20,9 @@ RUN apk add --update --no-cache \
     freetype-dev \
     nginx \
     supervisor
+
+RUN pecl install mongodb \
+  && docker-php-ext-enable mongodb
 
 # Configure & Install Extension
 RUN docker-php-ext-configure \
@@ -45,7 +51,6 @@ ENV PATH="./vendor/bin:$PATH"
 
 COPY master.ini /etc/supervisor.d/
 COPY default.conf /etc/nginx/conf.d/
-#COPY opcache.ini /usr/local/etc/php/conf.d/
 
 # Remove Build Dependencies
 RUN apk del -f .build-deps

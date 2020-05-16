@@ -37,6 +37,19 @@ services:
       target: 3306
     volumes:
     - ./storage/db:/var/lib/mysql
+  mongo:
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: laravel
+      MONGO_INITDB_ROOT_PASSWORD: laravel
+      MONGO_INITDB_DATABASE: laravel
+    image: mongo:4.2.6-bionic
+    networks:
+      laranet: null
+    ports:
+    - published: 27017
+      target: 27017
+    volumes:
+    - ./storage/mongo:/data/db
   queue:
     image: redis:5-alpine
     networks:
