@@ -5,64 +5,79 @@ Laravel installation.
 
 Laravel + Docker = ❤️
 
-The repository contains the following software:
+### STACK
 
 - php **7.3** + nginx **1.16.1** (alpine)
 - supervisord **4.1.0** (alpine)
 - mariadb **10.4** (bionic)
-- adminer **4**
+- phpmyadmin
 - redis **5** (alpine)
+- mongodb **4.2.6**
 
-Volumes are mounted on directory:
+### VOLUMES
 
-- **./storage**
+We are now using named volumes, for the databases. To view the available volumes you can do:
 
-### Start the stack
+```shell
+$ docker volume ls
+```
+
+### START
 
 Open a terminal and execute the following command in order to start the stack:
 
-```
+```shell
 $ docker-compose up -d
 ```
 
-### Stop the stack
+### STOP
 
 In order to stop the stack execute the following command:
 
-```
+```shell
 $ docker-compose down
 ```
 
-### Rebuild the images
+### REBUILD
 
 Use:
 
-```
+```shell
 $ docker-compose up --build -d
 ```
 
 or:
 
-```
+```shell
 $ docker-compose build
 ```
 
-### Check the results
+### DELETE THE VOLUMES
 
-Add the laravel files in the mounted directory and then visit:
+**WARNING**: This is a potentially catastrophic action and will delete any data
+in those volumes:
+
+```shell
+$ docker-compose down -v
+```
+
+### DOES IT WORK
+
+Add the Laravel files in the mounted directory and then visit:
 
 - http://localhost
 
-### Configuration variables used in your project
+### FAQ
 
 If you need access from a container to another instead of using the internal
 IP addresses of the containers, you can instead use their hostnames:
 
 - app (for the php-fpm/nginx container)
 - database (for the mariadb container)
-- adminer (for the adminer container)
+- pma (for the phpmyadmin container)
 - queue (for the redis container)
+- mongo (for the mongodb container)
 
-### Bug reports - features
+### BUG REPORTS - FEATURE REQUESTS
 
 For 🐞 reports please [open an issue](https://github.com/klipitkas/laravel-docker/issues).

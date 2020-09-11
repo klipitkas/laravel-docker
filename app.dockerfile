@@ -1,6 +1,6 @@
-FROM php:7.3-fpm-alpine3.11
+FROM php:7.3-fpm-alpine
 
-# Add Build Dependencies
+# Add build dependencies
 RUN apk add --no-cache --virtual .build-deps  \
     zlib-dev \
     libjpeg-turbo-dev \
@@ -11,7 +11,7 @@ RUN apk add --no-cache --virtual .build-deps  \
     openssl-dev \
     build-base
 
-# Add Production Dependencies
+# Add production dependencies
 RUN apk add --update --no-cache \
     jpegoptim \
     pngquant \
@@ -22,9 +22,9 @@ RUN apk add --update --no-cache \
     supervisor
 
 RUN pecl install mongodb \
-  && docker-php-ext-enable mongodb
+    && docker-php-ext-enable mongodb
 
-# Configure & Install Extension
+# Install the required extensions
 RUN docker-php-ext-configure \
     opcache --enable-opcache &&\
     docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ &&\
@@ -44,7 +44,7 @@ RUN docker-php-ext-configure \
 
 RUN apk add --no-cache libzip-dev && docker-php-ext-install zip
 
-# Add Composer
+# Add composer globally
 RUN curl -s https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV PATH="./vendor/bin:$PATH"
@@ -52,10 +52,10 @@ ENV PATH="./vendor/bin:$PATH"
 COPY master.ini /etc/supervisor.d/
 COPY default.conf /etc/nginx/conf.d/
 
-# Remove Build Dependencies
+# Remove build dependencies for a slim final image
 RUN apk del -f .build-deps
 
-# Setup Working Dir
+# Setup workdir
 WORKDIR /var/www
 
 CMD ["/usr/bin/supervisord"]

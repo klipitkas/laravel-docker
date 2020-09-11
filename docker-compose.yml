@@ -1,5 +1,10 @@
 networks:
-  laranet: {}
+  laranet:
+
+volumes:
+  mysql-data:
+  mongodb-data:
+
 services:
   pma:
     environment:
@@ -8,21 +13,21 @@ services:
     networks:
       laranet: null
     ports:
-    - published: 8080
-      target: 80
+      - published: 8080
+        target: 80
   app:
     build:
       context: .
       dockerfile: app.dockerfile
     environment:
       DB_HOST: database
-      DB_PORT: '3306'
+      DB_PORT: "3306"
     networks:
       laranet: null
     ports:
       - "80:80"
     volumes:
-    - ./storage/www:/var/www
+      - ./www:/var/www
   database:
     environment:
       MYSQL_DATABASE: laravel
@@ -33,10 +38,10 @@ services:
     networks:
       laranet: null
     ports:
-    - published: 3306
-      target: 3306
+      - published: 3306
+        target: 3306
     volumes:
-    - ./storage/db:/var/lib/mysql
+      - mysql-data:/var/lib/mysql
   mongo:
     environment:
       MONGO_INITDB_ROOT_USERNAME: laravel
@@ -46,16 +51,16 @@ services:
     networks:
       laranet: null
     ports:
-    - published: 27017
-      target: 27017
+      - published: 27017
+        target: 27017
     volumes:
-    - ./storage/mongo:/data/db
+      - mongodb-data:/data/db
   queue:
     image: redis:5-alpine
     networks:
       laranet: null
     ports:
-    - published: 6379
-      target: 6379
+      - published: 6379
+        target: 6379
 
-version: '3.7'
+version: "3.7"
